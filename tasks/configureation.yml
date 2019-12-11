@@ -10,7 +10,17 @@
     - 'logs'
     - 'temp'
 
-- name: Kafka configuration file transfer
+- name: Configure kernel parameters.
+  sysctl:
+    name: '{{ item.variable }}'
+    value: '{{ item.value }}'
+    state: 'present'
+    reload: 'yes'
+    sysctl_set: 'yes'
+    sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
+  loop: "{{ kafka_kernel_parameters|flatten(levels=1) }}"
+
+- name: Kafka configuration file transfer.
   template:
     src: '{{ item }}.j2'
     dest: '{{ kafka_path }}/kafka/config/{{ item }}'

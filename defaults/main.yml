@@ -47,14 +47,21 @@ kafka_port:
 
 # System Variables #
 kafka_arg:
+  num_network_threads: '10' # The number of threads that the server uses for receiving requests.
+  num_io_threads: '20' # The number of threads that the server uses for processing requests.
+  log_flush_interval_messages: '10000' # The number of messages to accept before forcing a flush of data to disk.
+  log_flush_interval_ms: '1000' # The maximum amount of time a message can sit in a log before we force a flush.
+  socket_send_buffer_bytes: '1048576' # The send buffer (SO_SNDBUF) used by the socket server.
+  socket_receive_buffer_bytes: '1048576' # The receive buffer (SO_RCVBUF) used by the socket server.
+  socket_request_max_bytes: '104857600' # The maximum size of a request that the socket server will accept.
   jvm_heapdumppath: '/tmp' # Heap dump folder.
   jvm_security_egd: '/dev/urandom' # Random number generation library.
   lc_ctype: 'zh_CN.UTF-8' # The language of messages.
   timezone: 'Asia/Shanghai' # Default timezone for a single instance of a running JVM.
   user: 'kafka' # Kafka running user.
   ulimit_core: 'unlimited' # The number of core dump launched by systemd.
-  ulimit_nofile: '20480' # The number of files launched by systemd.
-  ulimit_nproc: '20480' # The number of processes launched by systemd.
+  ulimit_nofile: '40960' # The number of files launched by systemd.
+  ulimit_nproc: '40960' # The number of processes launched by systemd.
   wrapper_console_format: 'PM' # Format to use for output to the console.
   wrapper_console_loglevel: 'INFO' # Log level to use for console output.
   wrapper_java_command_loglevel: 'NONE' # Log level to use for Java command.

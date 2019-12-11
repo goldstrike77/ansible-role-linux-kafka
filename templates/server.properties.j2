@@ -36,7 +36,7 @@ broker.id=0
 #     listeners = listener_name://host_name:port
 #   EXAMPLE:
 #     listeners = PLAINTEXT://your.host.name:9092
-listeners=PLAINTEXT://:{{ kafka_port.socket }}
+listeners=PLAINTEXT://{{ ansible_default_ipv4.address }}:{{ kafka_port.socket }}
 
 # Hostname and port the broker will advertise to producers and consumers. If not set, 
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
@@ -47,19 +47,19 @@ listeners=PLAINTEXT://:{{ kafka_port.socket }}
 #listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
 
 # The number of threads that the server uses for receiving requests from the network and sending responses to the network
-num.network.threads=3
+num.network.threads={{ kafka_arg.num_network_threads }}
 
 # The number of threads that the server uses for processing requests, which may include disk I/O
-num.io.threads=8
+num.io.threads={{ kafka_arg.num_io_threads }}
 
 # The send buffer (SO_SNDBUF) used by the socket server
-socket.send.buffer.bytes=102400
+socket.send.buffer.bytes={{ kafka_arg.socket_send_buffer_bytes }}
 
 # The receive buffer (SO_RCVBUF) used by the socket server
-socket.receive.buffer.bytes=102400
+socket.receive.buffer.bytes={{ kafka_arg.socket_receive_buffer_bytes }}
 
 # The maximum size of a request that the socket server will accept (protection against OOM)
-socket.request.max.bytes=104857600
+socket.request.max.bytes={{ kafka_arg.socket_request_max_bytes }}
 
 
 ############################# Log Basics #############################
@@ -95,10 +95,10 @@ transaction.state.log.min.isr=1
 # every N messages (or both). This can be done globally and overridden on a per-topic basis.
 
 # The number of messages to accept before forcing a flush of data to disk
-#log.flush.interval.messages=10000
+log.flush.interval.messages={{ kafka_arg.log_flush_interval_messages }}
 
 # The maximum amount of time a message can sit in a log before we force a flush
-#log.flush.interval.ms=1000
+log.flush.interval.ms={{ kafka_arg.log_flush_interval_ms }}
 
 ############################# Log Retention Policy #############################
 

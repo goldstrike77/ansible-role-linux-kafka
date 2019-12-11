@@ -81,6 +81,13 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kafka_port.wrapper_jvm`: A socket to communicate with its Java component running inside a JVM.
 
 ##### System Variables
+* `kafka_arg.num_network_threads` The number of threads that the server uses for receiving requests.
+* `kafka_arg.num_io_threads`: The number of threads that the server uses for processing requests.
+* `kafka_arg.log_flush_interval_messages`: The number of messages to accept before forcing a flush of data to disk.
+* `kafka_arg.log_flush_interval_ms`: The maximum amount of time a message can sit in a log before we force a flush.
+* `kafka_arg.socket_send_buffer_bytes`: The send buffer (SO_SNDBUF) used by the socket server.
+* `kafka_arg.socket_receive_buffer_bytes`: The receive buffer (SO_RCVBUF) used by the socket server.
+* `kafka_arg.socket_request_max_bytes`: The maximum size of a request that the socket server will accept.
 * `kafka_arg.jvm_heapdumppath`: Heap dump folder.
 * `kafka_arg.jvm_security_egd`: Random number generation library.
 * `kafka_arg.lc_ctype`: The language of messages.
@@ -137,6 +144,13 @@ You can also use the group_vars or the host_vars files for setting the variables
       wrapper: '35000-35999'
       wrapper_jvm: '36000-36999'
     kafka_arg:
+      num_network_threads: '10'
+      num_io_threads: '20'
+      log_flush_interval_messages: '10000'
+      log_flush_interval_ms: '1000'
+      socket_send_buffer_bytes: '1048576'
+      socket_receive_buffer_bytes: '1048576'
+      socket_request_max_bytes: '104857600'
       jvm_heapdumppath: '/tmp'
       jvm_security_egd: '/dev/urandom'
       lc_ctype: 'zh_CN.UTF-8'
