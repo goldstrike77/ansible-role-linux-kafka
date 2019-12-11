@@ -1,0 +1,34 @@
+---
+- name: Add Prometheus Kafka exporter YUM repositories
+  yum_repository:
+    name: '{{ kafka_exporter_repo_name }}'
+    description: '{{ kafka_exporter_repo_name }} YUM repository'
+    file: '{{ kafka_exporter_repo_name }}'
+    baseurl: '{{ kafka_exporter_repo_url }}'
+    gpgcheck: 'no'
+    timeout: '60'
+
+- name: Install the Prometheus Kafka exporter packages
+  yum:
+    name: '{{ kafka_exporter_packages }}'
+    state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
+
+- name: Prometheus Kafka exporter configure file transfer
+  template:
+    src: 'kafka_exporter.default.j2'
+    dest: '/etc/default/kafka_exporter'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: kafka_exporter_conf_update
+
+- name: Prometheus Kafka exporter service is enabled
+  systemd:
+    name: 'kafka_exporter.service'
+    enabled: 'yes'
+    state: 'restarted'
+    daemon_reload: yes
+  when:
+    - kafka_exporter_conf_update is changed

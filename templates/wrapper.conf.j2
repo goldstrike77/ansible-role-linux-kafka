@@ -1,0 +1,125 @@
+#********************************************************************
+# Wrapper Java Properties
+#********************************************************************
+# Java Application
+{% if syslog %}
+set.SYSLOG_ADDR={{ syslog_server | list | random(seed=ansible_hostname) }}
+set.SYSLOG_PORT={{ syslog_port }}
+set.SYSLOG_PROT={{ syslog_protocol | lower }}
+{% endif %}
+set.LC_CTYPE={{ kafka_arg.lc_ctype }}
+set.JAVA_HOME={{ kafka_java_home }}
+set.KAFKA_HOME={{ kafka_path }}/kafka
+wrapper.java.command=%JAVA_HOME%/bin/java
+wrapper.port.min={{ kafka_port.wrapper.split('-')[0] }}
+wrapper.port.max={{ kafka_port.wrapper.split('-')[1] }}
+wrapper.jvm.port.min={{ kafka_port.wrapper_jvm.split('-')[0] }}
+wrapper.jvm.port.max={{ kafka_port.wrapper_jvm.split('-')[1] }}
+wrapper.javaio.use_thread=TRUE
+wrapper.javaio.buffer_size=10485760
+
+# Limit the use of system-wide resources.
+wrapper.ulimit.nproc.soft={{ kafka_arg.ulimit_nproc }}
+wrapper.ulimit.nproc.hard={{ kafka_arg.ulimit_nproc }}
+wrapper.ulimit.nofile.soft={{ kafka_arg.ulimit_nofile }}
+wrapper.ulimit.nofile.hard={{ kafka_arg.ulimit_nofile }}
+wrapper.ulimit.core.soft=unlimited
+wrapper.ulimit.core.hard=unlimited
+wrapper.ulimit.loglevel=STATUS
+
+# Tell the Wrapper to log the full generated Java command line.
+wrapper.java.command.loglevel=NONE
+
+# Java Main class.  This class must implement the WrapperListener interface
+#  or guarantee that the WrapperManager class is initialized.  Helper
+#  classes are provided to do this for you.  See the Integration section
+#  of the documentation for details.
+wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp
+
+# Java Classpath (include wrapper.jar)  Add class path elements as
+#  needed starting from 1
+wrapper.java.classpath.1 = %KAFKA_HOME%/libs/*
+
+# Java Library Path (location of Wrapper.DLL or libwrapper.so)
+wrapper.java.library.path.1 = %KAFKA_HOME%/libs
+
+# Java Bits.  On applicable platforms, tells the JVM to run in 32 or 64-bit mode.
+wrapper.java.additional.auto_bits=TRUE
+
+# Java Additional Parameters
+wrapper.java.additional.1  = -Dkafka.logs.dir=%KAFKA_HOME%/logs
+wrapper.java.additional.2  = -Djava.awt.headless=true
+wrapper.java.additional.3  = -Djava.security.egd=file:{{ kafka_arg.jvm_security_egd }}
+wrapper.java.additional.4  = -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
+wrapper.java.additional.5  = -Djdk.tls.ephemeralDHKeySize=2048
+wrapper.java.additional.6  = -Dlog4j.configurationFile=%KAFKA_HOME%/config/log4j2.xml
+wrapper.java.additional.7  = -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+wrapper.java.additional.8  = -Duser.timezone=Asia/Shanghai
+wrapper.java.additional.9  = -Djava.io.tmpdir=%KAFKA_HOME%/temp
+wrapper.java.additional.10 = -server
+wrapper.java.additional.11 = -Xmn{{ kafka_jvm_xmn }}m
+wrapper.java.additional.12 = -Xss{{ kafka_jvm_xss }}k
+wrapper.java.additional.13 = -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses
+wrapper.java.additional.14 = -XX:+HeapDumpOnOutOfMemoryError
+wrapper.java.additional.15 = -XX:+TieredCompilation
+wrapper.java.additional.16 = -XX:HeapDumpPath={{ kafka_arg.jvm_heapdumppath }}
+wrapper.java.additional.17 = -XX:MaxMetaspaceSize={{ kafka_jvm_metaspace }}m
+wrapper.java.additional.18 = -XX:SurvivorRatio=1
+{% if syslog %}
+wrapper.java.additional.19 = -Dsyslog.addr=%SYSLOG_ADDR%
+wrapper.java.additional.20 = -Dsyslog.port=%SYSLOG_PORT%
+wrapper.java.additional.21 = -Dsyslog.prot=%SYSLOG_PROT%
+{% endif %}
+
+# Initial Java Heap Size (in MB)
+wrapper.java.initmemory={{ kafka_jvm_xmx }}
+
+# Maximum Java Heap Size (in MB)
+wrapper.java.maxmemory={{ kafka_jvm_xmx }}
+
+# Application parameters.  Add parameters as needed starting from 1
+wrapper.app.parameter.1 = kafka.Kafka
+wrapper.app.parameter.2 = %KAFKA_HOME%/config/server.properties
+
+#********************************************************************
+# Wrapper Logging Properties
+#********************************************************************
+# Enables Debug output from the Wrapper.
+# wrapper.debug=TRUE
+
+# Format of output for the console.  (See docs for formats)
+wrapper.console.format={{ kafka_arg.wrapper_console_format }}
+
+# Log Level for console output.  (See docs for log levels)
+wrapper.console.loglevel={{ kafka_arg.wrapper_console_loglevel }}
+
+# Log file to use for wrapper output logging.
+wrapper.logfile=%KAFKA_HOME%/logs/{{ kafka_arg.wrapper_logfile }}
+
+# Format of output for the log file.  (See docs for formats)
+wrapper.logfile.format={{ kafka_arg.wrapper_logfile_format }}
+
+# Log Level for log file output.  (See docs for log levels)
+wrapper.logfile.loglevel={{ kafka_arg.wrapper_logfile_loglevel }}
+
+# Maximum size that the log file will be allowed to grow to before
+#  the log is rolled. Size is specified in bytes.  The default value
+#  of 0, disables log rolling.  May abbreviate with the 'k' (kb) or
+#  'm' (mb) suffix.  For example: 10m = 10 megabytes.
+wrapper.logfile.maxsize={{ kafka_arg.wrapper_logfile_maxsize }}
+
+# Maximum number of rolled log files which will be allowed before old
+#  files are deleted.  The default value of 0 implies no limit.
+wrapper.logfile.maxfiles={{ kafka_arg.wrapper_logfile_maxfiles }}
+
+# Log Level for sys/event log output.  (See docs for log levels)
+wrapper.syslog.loglevel={{ kafka_arg.wrapper_syslog_loglevel }}
+
+#********************************************************************
+# Wrapper General Properties
+#********************************************************************
+# Allow for the use of non-contiguous numbered properties
+wrapper.ignore_sequence_gaps=TRUE
+
+# Title to use when running as a console
+wrapper.console.title=@app.long.name@

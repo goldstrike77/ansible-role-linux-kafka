@@ -1,0 +1,31 @@
+---
+- name: Creating Kafka working folder.
+  file:
+    dest: '{{ kafka_path }}/kafka/{{ item }}'
+    state: 'directory'
+    owner: '{{ kafka_arg.user }}'
+    group: '{{ kafka_arg.user }}'
+    mode: '0755'
+  loop:
+    - 'logs'
+    - 'temp'
+
+- name: Kafka configuration file transfer
+  template:
+    src: '{{ item }}.j2'
+    dest: '{{ kafka_path }}/kafka/config/{{ item }}'
+    backup: 'yes'
+    owner: '{{ kafka_arg.user }}'
+    group: '{{ kafka_arg.user }}'
+    mode: '0644'
+  loop: '{{ kafka_conf }}'
+  register: kafka_config_update
+
+- name: Kafka systemd service file transfer.
+  template:
+    src: 'kafka.service.j2'
+    dest: '/etc/systemd/system/kafka.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: kafka_systemd_update

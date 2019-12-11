@@ -1,0 +1,11 @@
+---
+kafka_dependent_packages:
+  - 'java-1.8.0-openjdk'
+  - 'java-1.8.0-openjdk-devel'
+  - 'libselinux-utils'
+  - 'policycoreutils-python'
+
+kafka_exporter_repo_name: 'prometheus'
+kafka_exporter_repo_url: "http://cache.omygods.com/prometheus-rpm/release/el/{{ansible_distribution_version.split('.')[0]}}/$basearch"
+kafka_exporter_packages:
+  - 'kafka_exporter'

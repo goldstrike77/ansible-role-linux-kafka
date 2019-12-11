@@ -1,0 +1,30 @@
+---
+- name: Include tasks for specific OS
+  include: '{{ ansible_os_family }}.yml'
+
+- name: Include firewall tasks
+  include: 'firewall.yml'
+
+- name: Kafka installation
+  include: 'install.yml'
+
+- name: Kafka configuration
+  include: 'configureation.yml'
+
+- name: Reload the Kafka service
+  shell: echo ''
+  notify: 'Ensure kafka service is enabled'
+  when: kafka_config_update is changed or kafka_systemd_update is changed
+
+- name: Force the handler to run immediately
+  meta: flush_handlers
+
+- name: Include Prometheus exporter tasks
+  include: 'exporter.yml'
+  when: exporter_is_install
+
+- name: Registered with HashiCorp Consul
+  include: 'register.yml'
+  when: 
+    - exporter_is_install | bool
+    - consul_public_register | bool

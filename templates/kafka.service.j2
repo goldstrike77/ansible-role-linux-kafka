@@ -1,0 +1,20 @@
+[Unit]
+Description=Kafka Application Server
+After=network.target
+
+[Service]
+Type=forking
+ExecStart={{ kafka_path }}/kafka/bin/kafka.init start sysd
+ExecStop={{ kafka_path }}/kafka/bin/kafka.init stop sysd
+User={{ kafka_arg.user }}
+LimitNOFILE={{ kafka_arg.ulimit_nofile }}
+LimitNPROC={{ kafka_arg.ulimit_nproc }}
+LimitCORE=infinity
+LimitMEMLOCK=infinity
+KillMode=control-group
+Environment=SYSTEMD_KILLMODE_WARNING=true
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,1 @@
+KAFKA_EXPORTER_OPTS='--web.listen-address=":{{ kafka_port.exporter }}" --kafka.server={{ ansible_default_ipv4.address }}:{{ kafka_port.socket }}'
