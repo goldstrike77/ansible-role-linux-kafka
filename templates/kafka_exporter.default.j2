@@ -1,1 +1,1 @@
-KAFKA_EXPORTER_OPTS='--web.listen-address=":{{ kafka_port.exporter }}" --kafka.server={{ ansible_default_ipv4.address }}:{{ kafka_port.socket }}'
+KAFKA_EXPORTER_OPTS='--web.listen-address=":{{ kafka_port.exporter }}" --kafka.server={{ ansible_default_ipv4.address }}:{{ kafka_port.socket }}{% if kafka_enable_auth | bool %} --sasl.enabled --sasl.username="admin" --sasl.password="{{ lookup('password', '' + group_names[-1] + ':authentication length=14 chars=ascii_letters,digits') }}"{% endif %}'

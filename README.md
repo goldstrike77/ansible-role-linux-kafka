@@ -46,14 +46,17 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### General parameters
 * `kafka_version`: Specify the Kafka version.
+* `kafka_cluster`: Cluster name of servers that implements distribution performance.
 * `kafka_path`: Specify the Kafka working directory.
 * `kafka_java_home`: Environment variable to point to an installed JDK.
 
 ##### JVM memory Variables
-* `kafka_jvm_metaspace`: Size of the metaspace in MB.
-* `kafka_jvm_xmn`: Size of the heap for the young generation in MB.
 * `kafka_jvm_xmx`: Size of the heap in MB.
-* `kafka_jvm_xss`: Size of thread stack in KB.
+
+##### ACL Variables
+* `kafka_enable_auth`: Whether enable authentication using SASL.
+* `kafka_zoo_client_arg`: Zookeeper authentication information.
+* `kafka_user_client_arg`: # Client authentication information.
 
 ##### Service Mesh
 * `environments`: Define the service environment.
@@ -63,12 +66,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `consul_public_exporter_token`: Public Consul client ACL token.
 * `consul_public_clients`: List of public consul clients.
 * `consul_public_http_port`: The consul HTTP API port.
-
-##### Syslog parameters
-* `syslog`: A boolean value, Enable or Disable send console and access log to remote Syslog server.
-* `syslog_port`: Syslog server port.
-* `syslog_protocol`: Syslog server protocol.
-* `syslog_server`: List of syslog server list.
 
 ##### Zookeeper parameters
 * `kafka_zoo_servers`: List of Zookeeper servers.
@@ -88,10 +85,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kafka_arg.socket_send_buffer_bytes`: The send buffer (SO_SNDBUF) used by the socket server.
 * `kafka_arg.socket_receive_buffer_bytes`: The receive buffer (SO_RCVBUF) used by the socket server.
 * `kafka_arg.socket_request_max_bytes`: The maximum size of a request that the socket server will accept.
-* `kafka_arg.jvm_heapdumppath`: Heap dump folder.
-* `kafka_arg.jvm_security_egd`: Random number generation library.
 * `kafka_arg.lc_ctype`: The language of messages.
-* `kafka_arg.timezone`: Default timezone for a single instance of a running JVM.
 * `kafka_arg.user`: Kafka running user.
 * `kafka_arg.ulimit_core`: The number of core dump launched by systemd.
 * `kafka_arg.ulimit_nofile`: The number of files launched by systemd.
@@ -132,12 +126,16 @@ Including an example of how to use your role for instance, with variables passed
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
 
     kafka_version: '2.3.1'
+    kafka_cluster: 'cluster'
     kafka_path: '/data'
     kafka_java_home: '/usr/lib/jvm/java'
-    kafka_jvm_metaspace: '512'
-    kafka_jvm_xmn: '384'
     kafka_jvm_xmx: '2048'
-    kafka_jvm_xss: '256'
+    kafka_enable_auth: true
+    kafka_zoo_client_arg:
+      - user: 'kafka'
+        pass: 'changeme'
+      - user: 'somebody'
+        pass: 'changeme'
     kafka_port:
       socket: '9092'
       exporter: '9308'
@@ -151,10 +149,7 @@ You can also use the group_vars or the host_vars files for setting the variables
       socket_send_buffer_bytes: '1048576'
       socket_receive_buffer_bytes: '1048576'
       socket_request_max_bytes: '104857600'
-      jvm_heapdumppath: '/tmp'
-      jvm_security_egd: '/dev/urandom'
       lc_ctype: 'zh_CN.UTF-8'
-      timezone: 'Asia/Shanghai'
       user: 'kafka'
       ulimit_core: 'unlimited'
       ulimit_nofile: '10240'
@@ -172,11 +167,6 @@ You can also use the group_vars or the host_vars files for setting the variables
     kafka_zoo_servers:
       - '127.0.0.1'
     kafka_zoo_port: '2181'
-    syslog: false
-    syslog_port: '12201'
-    syslog_protocol: 'udp'
-    syslog_server:
-      - '127.0.0.1'
     environments: 'Development'
     tags:
       subscription: 'default'

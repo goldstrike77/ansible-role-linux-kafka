@@ -9,6 +9,7 @@
   loop:
     - 'logs'
     - 'temp'
+    - 'var'
 
 - name: Configure kernel parameters.
   sysctl:
@@ -30,6 +31,16 @@
     mode: '0644'
   loop: '{{ kafka_conf }}'
   register: kafka_config_update
+
+- name: Kafka authentication config transfer.
+  template:
+    src: 'jaas.conf.j2'
+    dest: '{{ kafka_path }}/kafka/config/jaas.conf'
+    owner: '{{ kafka_arg.user }}'
+    group: '{{ kafka_arg.user }}'
+    mode: '0644'
+  when: kafka_enable_auth | bool
+  register: kafka_jaas_update
 
 - name: Kafka systemd service file transfer.
   template:

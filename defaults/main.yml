@@ -2,14 +2,21 @@
 # General parameters #
 kafka_is_install: false # A boolean value, whether install the Apache Kafka.
 kafka_version: '2.3.1' # Specify the Kafka version.
+kafka_cluster: 'cluster' # Cluster name of servers that implements distribution performance.
 kafka_path: '/data' # Specify the Kafka working directory.
 kafka_java_home: '/usr/lib/jvm/java' # Environment variable to point to an installed JDK.
 
 # JVM memory Variables #
-kafka_jvm_metaspace: '{% if ansible_memtotal_mb > 4096 and ansible_memtotal_mb <= 8192 %}512{% elif ansible_memtotal_mb > 8192 %}1024{% else %}256{% endif %}' # Size of the metaspace in MB.
-kafka_jvm_xmn: '{{ ((ansible_memtotal_mb - 2048 ) * 0.6 * 0.2)|int }}' # Size of the heap for the young generation in MB.
-kafka_jvm_xmx: '{{ ((ansible_memtotal_mb - 2048 ) * 0.6)|int }}' # Size of the heap in MB.
-kafka_jvm_xss: '256' # Size of thread stack in KB.
+kafka_jvm_xmx: '4096' # Size of the heap in MB.
+
+# ACL Variables #
+kafka_enable_auth: false # Whether enable authentication using SASL.
+kafka_zoo_client_arg: # Zookeeper authentication information.
+  - user: 'kafka'
+    pass: 'changeme'
+#kafka_user_client_arg: # Client authentication information.
+#  - user: 'somebody'
+#    pass: 'changeme'
 
 # Service Mesh #
 environments: 'SIT' # Define the service environment.
@@ -26,13 +33,6 @@ consul_public_http_port: '8500' # The consul HTTP API port.
 consul_public_clients: # List of public consul clients.
   - '127.0.0.1'
 
-# Syslog parameters #
-syslog: false # A boolean value, Enable or Disable send console and access log to remote Syslog server.
-syslog_port: '12201' # Syslog server port.
-syslog_protocol: 'udp' # Syslog server protocol.
-syslog_server: # List of syslog server list.
-  - '127.0.0.1'
-
 # Zookeeper parameters #
 kafka_zoo_servers: # List of Zookeeper servers.
   - '127.0.0.1'
@@ -42,8 +42,8 @@ kafka_zoo_port: '2181' # Zookeeper server listens.
 kafka_port:
   socket: '9092' # Server listens.
   exporter: '9308' # Prometheus exporter listens.
-  wrapper: '35000-35999' # A socket to communicate with its Java component running inside a JVM.
-  wrapper_jvm: '36000-36999' # A socket to communicate with its Java component running inside a JVM.
+  wrapper: '33000-33999' # A socket to communicate with its Java component running inside a JVM.
+  wrapper_jvm: '34000-34999' # A socket to communicate with its Java component running inside a JVM.
 
 # System Variables #
 kafka_arg:
@@ -54,10 +54,7 @@ kafka_arg:
   socket_send_buffer_bytes: '1048576' # The send buffer (SO_SNDBUF) used by the socket server.
   socket_receive_buffer_bytes: '1048576' # The receive buffer (SO_RCVBUF) used by the socket server.
   socket_request_max_bytes: '104857600' # The maximum size of a request that the socket server will accept.
-  jvm_heapdumppath: '/tmp' # Heap dump folder.
-  jvm_security_egd: '/dev/urandom' # Random number generation library.
   lc_ctype: 'zh_CN.UTF-8' # The language of messages.
-  timezone: 'Asia/Shanghai' # Default timezone for a single instance of a running JVM.
   user: 'kafka' # Kafka running user.
   ulimit_core: 'unlimited' # The number of core dump launched by systemd.
   ulimit_nofile: '40960' # The number of files launched by systemd.

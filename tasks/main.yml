@@ -14,7 +14,7 @@
 - name: Reload the Kafka service
   shell: echo ''
   notify: 'Ensure kafka service is enabled'
-  when: kafka_config_update is changed or kafka_systemd_update is changed
+  when: kafka_config_update is changed or kafka_systemd_update is changed or kafka_jaas_update is changed
 
 - name: Force the handler to run immediately
   meta: flush_handlers

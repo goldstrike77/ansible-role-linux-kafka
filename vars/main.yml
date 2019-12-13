@@ -1,22 +1,20 @@
 ---
 kafka_servers: "\
-  {% set _kafka_server = [] %}\
+  {% set _kafka_servers = [] %}\
   {% for host in groups[group_names[-1]] %}\
-    {% if ( kafka_is_install ) %}\
-      {% if _kafka_server.append(hostvars[host]['ansible_host']) %}{% endif %}\
+    {% if kafka_cluster is defined %}\
+      {% set _kafka_cluster = kafka_cluster | default('') %}\
+      {% if ( _kafka_cluster == kafka_cluster ) %}\
+        {% if _kafka_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
+      {% endif %}\
     {% endif %}\
   {% endfor %}\
-  {{ _kafka_server }}"
+  {{ _kafka_servers }}"
 
 kafka_soft_url: 'http://mirrors.tuna.tsinghua.edu.cn'
 
 kafka_support_jars:
-  - 'disruptor.jar'
   - 'libwrapper.so'
-  - 'log4j-api.jar'
-  - 'log4j-core.jar'
-  - 'log4j-jmx-gui.jar'
-  - 'log4j-jul.jar'
   - 'logstash-gelf.jar'
   - 'wrapper.jar'
 
@@ -25,7 +23,7 @@ kafka_support_binary:
   - 'kafka.init'
 
 kafka_conf:
-  - 'log4j2.xml'
+  - 'jaas.conf'
   - 'wrapper.conf'
   - 'server.properties'
 

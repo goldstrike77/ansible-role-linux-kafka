@@ -1,0 +1,29 @@
+KafkaServer {
+  org.apache.kafka.common.security.plain.PlainLoginModule required
+  username = "admin"
+  password = "{{ lookup('password', '' + group_names[-1] + ':authentication length=14 chars=ascii_letters,digits') }}"
+{% if kafka_user_client_arg is defined %}
+{% for client in kafka_user_client_arg %}
+  user_{{ client.user }}="{{ client.pass }}"
+{% endfor %}
+{% endif %}
+  user_admin = "{{ lookup('password', '' + group_names[-1] + ':authentication length=14 chars=ascii_letters,digits') }}";
+};
+
+{% if kafka_user_client_arg is defined %}
+KafkaClient {
+  org.apache.kafka.common.security.plain.PlainLoginModule required
+{% for client in kafka_user_client_arg %}
+  username="{{ client.user }}"
+  password="{{ client.pass }}"
+{% endfor %};
+};
+{% endif %}
+
+Client {
+  org.apache.kafka.common.security.plain.PlainLoginModule required
+{% for kafka_client in kafka_zoo_client_arg %}
+  username="{{ kafka_client.user }}"
+  password="{{ kafka_client.pass }}";
+{% endfor %}
+};

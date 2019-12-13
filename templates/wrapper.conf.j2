@@ -2,11 +2,6 @@
 # Wrapper Java Properties
 #********************************************************************
 # Java Application
-{% if syslog %}
-set.SYSLOG_ADDR={{ syslog_server | list | random(seed=ansible_hostname) }}
-set.SYSLOG_PORT={{ syslog_port }}
-set.SYSLOG_PROT={{ syslog_protocol | lower }}
-{% endif %}
 set.LC_CTYPE={{ kafka_arg.lc_ctype }}
 set.JAVA_HOME={{ kafka_java_home }}
 set.KAFKA_HOME={{ kafka_path }}/kafka
@@ -47,28 +42,17 @@ wrapper.java.library.path.1 = %KAFKA_HOME%/libs
 wrapper.java.additional.auto_bits=TRUE
 
 # Java Additional Parameters
-wrapper.java.additional.1  = -Dkafka.logs.dir=%KAFKA_HOME%/logs
-wrapper.java.additional.2  = -Djava.awt.headless=true
-wrapper.java.additional.3  = -Djava.security.egd=file:{{ kafka_arg.jvm_security_egd }}
-wrapper.java.additional.4  = -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
-wrapper.java.additional.5  = -Djdk.tls.ephemeralDHKeySize=2048
-wrapper.java.additional.6  = -Dlog4j.configurationFile=%KAFKA_HOME%/config/log4j2.xml
-wrapper.java.additional.7  = -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
-wrapper.java.additional.8  = -Duser.timezone=Asia/Shanghai
+wrapper.java.additional.1  = -server
+wrapper.java.additional.2  = -XX:+UseG1GC
+wrapper.java.additional.3  = -XX:MaxGCPauseMillis=20
+wrapper.java.additional.4  = -XX:InitiatingHeapOccupancyPercent=35
+wrapper.java.additional.5  = -XX:+ExplicitGCInvokesConcurrent
+wrapper.java.additional.6  = -Djava.awt.headless=true
+wrapper.java.additional.7  = -Dlog4j.configuration=file:%KAFKA_HOME%/config/log4j.properties
+wrapper.java.additional.8  = -Dkafka.logs.dir=%KAFKA_HOME%/logs
 wrapper.java.additional.9  = -Djava.io.tmpdir=%KAFKA_HOME%/temp
-wrapper.java.additional.10 = -server
-wrapper.java.additional.11 = -Xmn{{ kafka_jvm_xmn }}m
-wrapper.java.additional.12 = -Xss{{ kafka_jvm_xss }}k
-wrapper.java.additional.13 = -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses
-wrapper.java.additional.14 = -XX:+HeapDumpOnOutOfMemoryError
-wrapper.java.additional.15 = -XX:+TieredCompilation
-wrapper.java.additional.16 = -XX:HeapDumpPath={{ kafka_arg.jvm_heapdumppath }}
-wrapper.java.additional.17 = -XX:MaxMetaspaceSize={{ kafka_jvm_metaspace }}m
-wrapper.java.additional.18 = -XX:SurvivorRatio=1
-{% if syslog %}
-wrapper.java.additional.19 = -Dsyslog.addr=%SYSLOG_ADDR%
-wrapper.java.additional.20 = -Dsyslog.port=%SYSLOG_PORT%
-wrapper.java.additional.21 = -Dsyslog.prot=%SYSLOG_PROT%
+{% if kafka_enable_auth | bool %}
+wrapper.java.additional.10 = -Djava.security.auth.login.config=%KAFKA_HOME%/config/jaas.conf
 {% endif %}
 
 # Initial Java Heap Size (in MB)
