@@ -23,7 +23,6 @@ kafka_support_binary:
   - 'kafka.init'
 
 kafka_conf:
-  - 'jaas.conf'
   - 'wrapper.conf'
   - 'server.properties'
 
