@@ -9,6 +9,9 @@ kafka_java_home: '/usr/lib/jvm/java' # Environment variable to point to an insta
 # JVM memory Variables #
 kafka_jvm_xmx: '4096' # Size of the heap in MB.
 
+# Role dependencies #
+kafka_zoo_dept: false # A boolean value, whether Zookeeper use the same environment.
+
 # ACL Variables #
 kafka_enable_auth: false # Whether enable authentication using SASL.
 kafka_zoo_client_arg: # Zookeeper authentication information.
@@ -34,9 +37,23 @@ consul_public_clients: # List of public consul clients.
   - '127.0.0.1'
 
 # Zookeeper parameters #
+kafka_zoo_version: '3.5.6' # Specify the Zookeeper version.
+kafka_zoo_cluster: 'zk-cluster01' # Name of Zookeeper cluster.
+kafka_zoo_path: '/data' # Specify the Zookeeper working directory.
 kafka_zoo_servers: # List of Zookeeper servers.
   - '127.0.0.1'
-kafka_zoo_port: '2181' # Zookeeper server listens.
+kafka_zoo_jvm_xmx: '2048' # Size of the heap in MB.
+kafka_zoo_port: # Zookeeper server listens.
+  admin: '18080' # The port the embedded Jetty server listens on.
+  client: '2181' # Client Port.
+  jmx: '9405' # Prometheus jmx_exporter listens.
+  leader: '2888' # Leader communication.
+  election: '3888' # Leader election.
+kafka_zoo_enable_auth: false # Whether enable quorum authentication using SASL.
+kafka_zoo_user_super_passwd: 'changeme' # Administrator priviledges user password.
+kafka_zoo_user_client_arg: # Client authentication information.
+  - user: 'kafka'
+    passwd: 'changeme'
 
 # Listen port #
 kafka_port:

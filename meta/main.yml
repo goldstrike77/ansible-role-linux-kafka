@@ -47,7 +47,18 @@ galaxy_info:
     # NOTE: A tag is limited to a single word comprised of alphanumeric characters.
     #       Maximum 20 tags per role.
 
-dependencies: []
+dependencies:
   # List your role dependencies here, one per line. Be sure to remove the '[]' above,
   # if you add dependencies to this list.
-  
+  - role: 'ansible-role-linux-zookeeper'
+    vars:
+      zoo_version: '{{ kafka_zoo_version }}'
+      zoo_cluster: '{{ kafka_zoo_cluster }}'
+      zoo_path: '{{ kafka_zoo_path }}'
+      zoo_servers: '{{ kafka_servers }}'
+      zoo_jvm_xmx: '{{ kafka_zoo_jvm_xmx }}'
+      zoo_port: '{{ kafka_zoo_port }}'
+      zoo_enable_auth: '{{ kafka_zoo_enable_auth | bool }}'
+      zoo_user_super_passwd: '{{ kafka_zoo_user_super_passwd }}'
+      zoo_user_client_arg: '{{ kafka_zoo_user_client_arg }}'
+    when: kafka_zoo_dept | bool

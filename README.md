@@ -53,6 +53,9 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### JVM memory Variables
 * `kafka_jvm_xmx`: Size of the heap in MB.
 
+##### Role dependencies
+* `kafka_zoo_dept`: A boolean value, whether Zookeeper use the same environment.
+
 ##### ACL Variables
 * `kafka_enable_auth`: Whether enable authentication using SASL.
 * `kafka_zoo_client_arg`: Zookeeper authentication information.
@@ -68,8 +71,15 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `consul_public_http_port`: The consul HTTP API port.
 
 ##### Zookeeper parameters
+* `kafka_zoo_version`: Specify the Zookeeper version.
+* `kafka_zoo_cluster`: Name of Zookeeper cluster.
+* `kafka_zoo_path`: Specify the Zookeeper working directory.
 * `kafka_zoo_servers`: List of Zookeeper servers.
+* `kafka_zoo_jvm_xmx`: Size of the heap in MB.
 * `kafka_zoo_port`: Zookeeper server listens.
+* `kafka_zoo_enable_auth`: Whether enable quorum authentication using SASL.
+* `kafka_zoo_user_super_passwd`: Administrator priviledges user password.
+* `kafka_zoo_user_client_arg`: Client authentication information.
 
 ##### Listen port
 * `kafka_port.socket`: Server listens.
@@ -164,9 +174,23 @@ You can also use the group_vars or the host_vars files for setting the variables
       wrapper_logfile_maxsize: '50m'
       wrapper_syslog_loglevel: 'NONE'
       wrapper_ulimit_loglevel: 'STATUS'
+    kafka_zoo_version: '3.5.6'
+    kafka_zoo_cluster: 'zk-cluster01'
+    kafka_zoo_path: '/data'
     kafka_zoo_servers:
       - '127.0.0.1'
-    kafka_zoo_port: '2181'
+    kafka_zoo_jvm_xmx: '2048'
+    kafka_zoo_port:
+      admin: '18080'
+      client: '2181'
+      jmx: '9405'
+      leader: '2888'
+      election: '3888'
+    kafka_zoo_enable_auth: false
+    kafka_zoo_user_super_passwd: 'changeme'
+    kafka_zoo_user_client_arg:
+      - user: 'kafka'
+        passwd: 'changeme'
     environments: 'Development'
     tags:
       subscription: 'default'
