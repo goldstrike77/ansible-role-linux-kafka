@@ -15,7 +15,7 @@ kafka_zoo_dept: false # A boolean value, whether Zookeeper use the same environm
 # Kafka Eagle #
 kafka_eagle_is_install: false # Whether install the Kafka Eagle.
 kafka_eagle_version: '1.4.1' # Specify the Kafka Eagle version.
-kafka_eagle_token: 'changme' # Kafka topic delete token.
+kafka_eagle_token: 'changeme' # Kafka topic delete token.
 
 # ACL Variables #
 kafka_enable_auth: false # Whether enable authentication using SASL.
