@@ -56,6 +56,11 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### Role dependencies
 * `kafka_zoo_dept`: A boolean value, whether Zookeeper use the same environment.
 
+##### Kafka Eagle
+* `kafka_eagle_is_install`: Whether install the Kafka Eagle.
+* `kafka_eagle_version`: Specify the Kafka Eagle version.
+* `kafka_eagle_token`: Kafka topic delete token.
+
 ##### ACL Variables
 * `kafka_enable_auth`: Whether enable authentication using SASL.
 * `kafka_zoo_client_arg`: Zookeeper authentication information.
@@ -140,6 +145,9 @@ You can also use the group_vars or the host_vars files for setting the variables
     kafka_path: '/data'
     kafka_java_home: '/usr/lib/jvm/java'
     kafka_jvm_xmx: '2048'
+    kafka_eagle_is_install: false
+    kafka_eagle_version: '1.4.1'
+    kafka_eagle_token: 'changme'
     kafka_enable_auth: true
     kafka_zoo_client_arg:
       - user: 'kafka'

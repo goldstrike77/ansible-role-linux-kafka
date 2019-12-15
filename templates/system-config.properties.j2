@@ -1,0 +1,64 @@
+######################################
+# multi zookeeper&kafka cluster list
+######################################
+kafka.eagle.zk.cluster.alias={{ kafka_cluster }}
+{{ kafka_cluster }}.zk.list={{ kafka_zoo_servers | list | join(":" + kafka_zoo_port.client + ",") }}:{{ kafka_zoo_port.client }}
+
+######################################
+# zk client thread limit
+######################################
+kafka.zk.limit.size=25
+
+######################################
+# kafka eagle webui port
+######################################
+kafka.eagle.webui.port={{ kafka_port.eagle }}
+
+######################################
+# kafka offset storage
+######################################
+{{ kafka_cluster }}.kafka.eagle.offset.storage=kafka
+
+######################################
+# kafka metrics, 30 days by default
+######################################
+kafka.eagle.metrics.charts=false
+kafka.eagle.metrics.retain=30
+
+
+######################################
+# kafka sql topic records max
+######################################
+kafka.eagle.sql.topic.records.max=5000
+kafka.eagle.sql.fix.error=false
+
+######################################
+# delete kafka topic token
+######################################
+kafka.eagle.topic.token={{ kafka_eagle_token }}
+
+######################################
+# kafka sasl authenticate
+######################################
+{{ kafka_cluster }}.kafka.eagle.sasl.enable={{ kafka_enable_auth | bool | to_json }}
+{{ kafka_cluster }}.kafka.eagle.sasl.protocol=SASL_PLAINTEXT
+{{ kafka_cluster }}.kafka.eagle.sasl.mechanism=SCRAM-SHA-256
+{{ kafka_cluster }}.kafka.eagle.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="admin" password="{{ lookup('password', '' + group_names[-1] + ':authentication length=14 chars=ascii_letters,digits') }}";
+{{ kafka_cluster }}.kafka.eagle.sasl.client.id=
+
+######################################
+# kafka sqlite jdbc driver address
+######################################
+kafka.eagle.driver=org.sqlite.JDBC
+kafka.eagle.url=jdbc:sqlite:{{ kafka_path }}/eagle/db/ke.db
+kafka.eagle.username=root
+kafka.eagle.password={{ lookup('password', '' + group_names[-1] + ':eagle length=14 chars=ascii_letters,digits') }}
+
+######################################
+# kafka mysql jdbc driver address
+######################################
+#kafka.eagle.driver=com.mysql.jdbc.Driver
+#kafka.eagle.url=jdbc:mysql://127.0.0.1:3306/ke?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+#kafka.eagle.username=root
+#kafka.eagle.password=123456
+

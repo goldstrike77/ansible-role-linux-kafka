@@ -12,6 +12,11 @@ kafka_jvm_xmx: '4096' # Size of the heap in MB.
 # Role dependencies #
 kafka_zoo_dept: false # A boolean value, whether Zookeeper use the same environment.
 
+# Kafka Eagle #
+kafka_eagle_is_install: false # Whether install the Kafka Eagle.
+kafka_eagle_version: '1.4.1' # Specify the Kafka Eagle version.
+kafka_eagle_token: 'changme' # Kafka topic delete token.
+
 # ACL Variables #
 kafka_enable_auth: false # Whether enable authentication using SASL.
 kafka_zoo_client_arg: # Zookeeper authentication information.
@@ -58,6 +63,7 @@ kafka_zoo_user_client_arg: # Client authentication information.
 # Listen port #
 kafka_port:
   socket: '9092' # Server listens.
+  eagle: '8048' # Eagle webui.
   exporter: '9308' # Prometheus exporter listens.
   wrapper: '33000-33999' # A socket to communicate with its Java component running inside a JVM.
   wrapper_jvm: '34000-34999' # A socket to communicate with its Java component running inside a JVM.

@@ -1,0 +1,19 @@
+[Unit]
+Description=kafka-eagle
+After=network.target
+
+[Service]
+User={{ kafka_arg.user }}
+Group={{ kafka_arg.user }}
+Environment=KE_HOME={{ kafka_path }}/eagle
+Environment=JAVA_HOME={{ kafka_java_home }}
+Type=forking
+ExecStart=/bin/bash {{ kafka_path }}/eagle/bin/ke.sh start
+ExecReload=/bin/bash {{ kafka_path }}/eagle/bin/ke.sh restart
+ExecStop=/bin/bash {{ kafka_path }}/eagle/bin/ke.sh stop
+Restart=always
+RestartSec=5
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target

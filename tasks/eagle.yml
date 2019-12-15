@@ -1,0 +1,71 @@
+---
+- name: Creating Kafka Eagle working folder.
+  file:
+    dest: '{{ kafka_path }}/eagle'
+    state: 'directory'
+    owner: '{{ kafka_arg.user }}'
+    group: '{{ kafka_arg.user }}'
+    mode: '0700'
+  register: kafka_eagle_folder
+
+- name: Kafka Eagle operation.
+  block:
+    - name: Download Kafka Eagle {{ kafka_eagle_version }} binary.
+      unarchive:
+        src: '{{ kafka_eagle_soft_url }}/v{{ kafka_eagle_version }}.tar.gz'
+        dest: '/tmp'
+        owner: 'root'
+        group: 'root'
+        extra_opts: [--strip-components=1]
+        remote_src: 'yes'
+        validate_certs: 'no'
+      register: kafka_eagle_download
+      until: kafka_eagle_download is succeeded
+      retries: 3
+      delay: 5
+    - name: Install Kafka Eagle {{ kafka_eagle_version }}.
+      unarchive:
+        src: '/tmp/kafka-eagle-web-{{ kafka_eagle_version }}-bin.tar.gz'
+        dest: '{{ kafka_path }}/eagle'
+        owner: '{{ kafka_arg.user }}'
+        group: '{{ kafka_arg.user }}'
+        extra_opts: [--strip-components=1]
+        remote_src: 'yes'
+      register: kafka_eagle_install
+      until: kafka_eagle_install is succeeded
+      retries: 3
+      delay: 2
+    - name: Remove Kafka Eagle binary file.
+      file:
+        path: '/tmp/kafka-eagle-web-{{ kafka_eagle_version }}-bin.tar.gz'
+        state: 'absent'
+  when: kafka_eagle_folder is changed
+
+- name: Kafka Eagle configuration file transfer.
+  template:
+    src: 'system-config.properties.j2'
+    dest: '{{ kafka_path }}/eagle/conf/system-config.properties'
+    backup: 'yes'
+    owner: '{{ kafka_arg.user }}'
+    group: '{{ kafka_arg.user }}'
+    mode: '0644'
+  register: kafka_eagle_config_update
+
+- name: Kafka Eagle systemd service file transfer.
+  template:
+    src: 'kafka-eagle.service.j2'
+    dest: '/etc/systemd/system/kafka-eagle.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: kafka_eagle_systemd_update
+
+- name: Enable Kafka Eagle service
+  systemd:
+    name: 'kafka-eagle.service'
+    enabled: 'yes'
+    state: 'restarted'
+    daemon_reload: 'yes'
+  async: 1
+  poll: 0
+  when: kafka_eagle_config_update is changed or kafka_eagle_systemd_update is changed

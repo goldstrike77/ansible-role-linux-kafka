@@ -38,3 +38,5 @@ kafka_kernel_parameters:
   - { variable: 'net.core.netdev_max_backlog', value: '262144' }
   - { variable: 'net.ipv4.tcp_rmem', value: '8192 87380 16777216' }
   - { variable: 'net.ipv4.tcp_wmem', value: '8192 65536 16777216' }
+
+kafka_eagle_soft_url: 'http://github.com/smartloli/kafka-eagle-bin/archive'

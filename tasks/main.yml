@@ -34,3 +34,9 @@
   when: 
     - exporter_is_install | bool
     - consul_public_register | bool
+
+- name: Kafka Eagle installation.
+  include: 'eagle.yml'
+  when:
+    - kafka_eagle_is_install | bool
+    - kafka_servers[0] in ansible_default_ipv4.address
