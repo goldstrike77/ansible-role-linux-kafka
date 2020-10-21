@@ -10,7 +10,7 @@
 
 - name: Kafka Eagle operation.
   block:
-    - name: Download Kafka Eagle {{ kafka_eagle_version }} binary.
+    - name: Download Kafka Eagle binary.
       unarchive:
         src: '{{ kafka_eagle_soft_url }}/v{{ kafka_eagle_version }}.tar.gz'
         dest: '/tmp'
@@ -23,7 +23,7 @@
       until: kafka_eagle_download is succeeded
       retries: 3
       delay: 5
-    - name: Install Kafka Eagle {{ kafka_eagle_version }}.
+    - name: Install Kafka Eagle.
       unarchive:
         src: '/tmp/kafka-eagle-web-{{ kafka_eagle_version }}-bin.tar.gz'
         dest: '{{ kafka_path }}/eagle'

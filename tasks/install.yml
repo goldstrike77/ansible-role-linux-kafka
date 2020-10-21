@@ -10,9 +10,9 @@
     group: '{{ kafka_arg.user }}'
     home: '{{ kafka_path }}/kafka'
 
-- name: Install Apache Kafka {{ kafka_version }} Core.
+- name: Install Apache Kafka Core.
   unarchive:
-    src: '{{ kafka_soft_url }}/apache/kafka/{{ kafka_version }}/kafka_2.12-{{ kafka_version }}.tgz'
+    src: '{{ kafka_soft_url }}/apache/kafka/{{ kafka_version }}/kafka_2.13-{{ kafka_version }}.tgz'
     dest: '{{ kafka_path }}/kafka'
     owner: '{{ kafka_arg.user }}'
     group: '{{ kafka_arg.user }}'
@@ -22,8 +22,8 @@
     validate_certs: 'no'
   register: kafka_update
   until: kafka_update is succeeded
-  retries: 3
-  delay: 5
+  retries: 5
+  delay: 2
 
 - name: Install Kafka support binary package.
   copy:

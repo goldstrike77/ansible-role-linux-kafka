@@ -26,11 +26,11 @@ __Table of Contents__
 - [Contributors](#Contributors)
 
 ## Overview
-This Ansible role installs apache Kafka on linux operating system, including establishing a filesystem structure and server configuration with some common operational features.
+Kafka is an open-source stream-processing software platform developed by the Apache Software Foundation, written in Scala and Java. The project aims to provide a unified, high-throughput, low-latency platform for handling real-time data feeds.
 
 ## Requirements
 ### Operating systems
-This role will work on the following operating systems:
+This Ansible role installs apache Kafka on linux operating system, including establishing a filesystem structure and server configuration with some common operational features, Will works on the following operating systems:
 
   * CentOS 7
 
@@ -38,7 +38,7 @@ This role will work on the following operating systems:
 
 The following list of supported the kafka releases:
 
-* Apache Kafka 2.3.1
+* Apache Kafka 2.5.1
 
 ## Role variables
 ### Main parameters #
@@ -109,6 +109,8 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### Service Mesh
 * `environments`: Define the service environment.
+* `datacenter`: Define the DataCenter.
+* `domain`: Define the Domain.
 * `tags`: Define the service custom label.
 * `exporter_is_install`: Whether to install prometheus exporter.
 * `consul_public_register`: Whether register a exporter service with public consul client.
@@ -128,92 +130,98 @@ There are no dependencies on other roles.
 ### Hosts inventory file
 See tests/inventory for an example.
 
-    node01 ansible_host='192.168.1.10' kafka_version='2.3.1'
+    node01 ansible_host='192.168.1.10' kafka_version='2.5.1'
 
 ### Vars in role configuration
 Including an example of how to use your role for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: all
-      roles:
-         - role: ansible-role-linux-kafka
-           kafka_version: '2.3.1'
+```yaml
+- hosts: all
+  roles:
+     - role: ansible-role-linux-kafka
+       kafka_version: '2.5.1'
+```
 
 ### Combination of group vars and playbook
-You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
+You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
-    kafka_version: '2.3.1'
-    kafka_cluster: 'cluster'
-    kafka_path: '/data'
-    kafka_java_home: '/usr/lib/jvm/java'
-    kafka_jvm_xmx: '2048'
-    kafka_eagle_is_install: false
-    kafka_eagle_version: '1.4.1'
-    kafka_eagle_token: 'changme'
-    kafka_enable_auth: true
-    kafka_zoo_client_arg:
-      - user: 'kafka'
-        pass: 'changeme'
-      - user: 'somebody'
-        pass: 'changeme'
-    kafka_port:
-      socket: '9092'
-      exporter: '9308'
-      wrapper: '35000-35999'
-      wrapper_jvm: '36000-36999'
-    kafka_arg:
-      num_network_threads: '10'
-      num_io_threads: '20'
-      log_flush_interval_messages: '10000'
-      log_flush_interval_ms: '1000'
-      socket_send_buffer_bytes: '1048576'
-      socket_receive_buffer_bytes: '1048576'
-      socket_request_max_bytes: '104857600'
-      lc_ctype: 'zh_CN.UTF-8'
-      user: 'kafka'
-      ulimit_core: 'unlimited'
-      ulimit_nofile: '10240'
-      ulimit_nproc: '10240'
-      wrapper_console_format: 'PM'
-      wrapper_console_loglevel: 'INFO'
-      wrapper_java_command_loglevel: 'NONE'
-      wrapper_logfile: 'kafka.out'
-      wrapper_logfile_format: 'ZM'
-      wrapper_logfile_loglevel: 'INFO'
-      wrapper_logfile_maxfiles: '25'
-      wrapper_logfile_maxsize: '50m'
-      wrapper_syslog_loglevel: 'NONE'
-      wrapper_ulimit_loglevel: 'STATUS'
-    kafka_zoo_version: '3.5.6'
-    kafka_zoo_cluster: 'zk-cluster01'
-    kafka_zoo_path: '/data'
-    kafka_zoo_servers:
-      - '127.0.0.1'
-    kafka_zoo_jvm_xmx: '2048'
-    kafka_zoo_port:
-      admin: '18080'
-      client: '2181'
-      jmx: '9405'
-      leader: '2888'
-      election: '3888'
-    kafka_zoo_enable_auth: false
-    kafka_zoo_user_super_passwd: 'changeme'
-    kafka_zoo_user_client_arg:
-      - user: 'kafka'
-        passwd: 'changeme'
-    environments: 'Development'
-    tags:
-      subscription: 'default'
-      owner: 'nobody'
-      department: 'Infrastructure'
-      organization: 'The Company'
-      region: 'IDC01'
-    exporter_is_install: false
-    consul_public_register: false
-    consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
-    consul_public_http_prot: 'https'
-    consul_public_http_port: '8500'
-    consul_public_clients:
-      - '127.0.0.1'
+```yaml
+kafka_version: '2.5.1'
+kafka_cluster: 'cluster'
+kafka_path: '/data'
+kafka_java_home: '/usr/lib/jvm/java'
+kafka_jvm_xmx: '2048'
+kafka_eagle_is_install: false
+kafka_eagle_version: '1.4.1'
+kafka_eagle_token: 'changme'
+kafka_enable_auth: true
+kafka_zoo_client_arg:
+  - user: 'kafka'
+    pass: 'changeme'
+  - user: 'somebody'
+    pass: 'changeme'
+kafka_port:
+  socket: '9092'
+  exporter: '9308'
+  wrapper: '35000-35999'
+  wrapper_jvm: '36000-36999'
+kafka_arg:
+  num_network_threads: '10'
+  num_io_threads: '20'
+  log_flush_interval_messages: '10000'
+  log_flush_interval_ms: '1000'
+  socket_send_buffer_bytes: '1048576'
+  socket_receive_buffer_bytes: '1048576'
+  socket_request_max_bytes: '104857600'
+  lc_ctype: 'zh_CN.UTF-8'
+  user: 'kafka'
+  ulimit_core: 'unlimited'
+  ulimit_nofile: '10240'
+  ulimit_nproc: '10240'
+  wrapper_console_format: 'PM'
+  wrapper_console_loglevel: 'INFO'
+  wrapper_java_command_loglevel: 'NONE'
+  wrapper_logfile: 'kafka.out'
+  wrapper_logfile_format: 'ZM'
+  wrapper_logfile_loglevel: 'INFO'
+  wrapper_logfile_maxfiles: '25'
+  wrapper_logfile_maxsize: '50m'
+  wrapper_syslog_loglevel: 'NONE'
+  wrapper_ulimit_loglevel: 'STATUS'
+kafka_zoo_version: '3.5.8'
+kafka_zoo_cluster: 'zk-cluster01'
+kafka_zoo_path: '/data'
+kafka_zoo_servers:
+  - '127.0.0.1'
+kafka_zoo_jvm_xmx: '2048'
+kafka_zoo_port:
+  admin: '18080'
+  client: '2181'
+  jmx: '9405'
+  leader: '2888'
+  election: '3888'
+kafka_zoo_enable_auth: false
+kafka_zoo_user_super_passwd: 'changeme'
+kafka_zoo_user_client_arg:
+  - user: 'kafka'
+    passwd: 'changeme'
+environments: 'Development'
+datacenter: 'dc01'
+domain: 'local'
+tags:
+  subscription: 'default'
+  owner: 'nobody'
+  department: 'Infrastructure'
+  organization: 'The Company'
+  region: 'IDC01'
+exporter_is_install: false
+consul_public_register: false
+consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
+consul_public_http_prot: 'https'
+consul_public_http_port: '8500'
+consul_public_clients:
+  - '127.0.0.1'
+```
 
 ## License
 

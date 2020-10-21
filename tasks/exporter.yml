@@ -14,6 +14,10 @@
     state: 'present'
     validate_certs: 'no'
     disable_gpg_check: 'yes'
+  register: yum_status
+  until: yum_status is succeeded
+  retries: 5
+  delay: 2
 
 - name: Prometheus Kafka exporter configure file transfer
   template:
@@ -29,6 +33,5 @@
     name: 'kafka_exporter.service'
     enabled: 'yes'
     state: 'restarted'
-    daemon_reload: yes
-  when:
-    - kafka_exporter_conf_update is changed
+    daemon_reload: 'yes'
+  when: kafka_exporter_conf_update is changed

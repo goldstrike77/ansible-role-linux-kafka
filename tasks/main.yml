@@ -27,7 +27,7 @@
 
 - name: Include Prometheus exporter tasks.
   include: 'exporter.yml'
-  when: exporter_is_install
+  when: exporter_is_install | bool
 
 - name: Registered with HashiCorp Consul.
   include: 'register.yml'

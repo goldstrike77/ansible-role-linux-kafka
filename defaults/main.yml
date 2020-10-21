@@ -1,7 +1,7 @@
 ---
 # General parameters #
 kafka_is_install: false # A boolean value, whether install the Apache Kafka.
-kafka_version: '2.3.1' # Specify the Kafka version.
+kafka_version: '2.5.1' # Specify the Kafka version.
 kafka_cluster: 'cluster' # Cluster name of servers that implements distribution performance.
 kafka_path: '/data' # Specify the Kafka working directory.
 kafka_java_home: '/usr/lib/jvm/java' # Environment variable to point to an installed JDK.
@@ -13,8 +13,8 @@ kafka_jvm_xmx: '4096' # Size of the heap in MB.
 kafka_zoo_dept: false # A boolean value, whether Zookeeper use the same environment.
 
 # Kafka Eagle #
-kafka_eagle_is_install: false # Whether install the Kafka Eagle.
-kafka_eagle_version: '1.4.1' # Specify the Kafka Eagle version.
+kafka_eagle_is_install: true # Whether install the Kafka Eagle.
+kafka_eagle_version: '1.4.8' # Specify the Kafka Eagle version.
 kafka_eagle_token: 'changeme' # Kafka topic delete token.
 
 # ACL Variables #
@@ -27,7 +27,7 @@ kafka_zoo_client_arg: # Zookeeper authentication information.
 #    pass: 'changeme'
 
 # Zookeeper parameters #
-kafka_zoo_version: '3.5.6' # Specify the Zookeeper version.
+kafka_zoo_version: '3.5.8' # Specify the Zookeeper version.
 kafka_zoo_cluster: 'zk-cluster01' # Name of Zookeeper cluster.
 kafka_zoo_path: '/data' # Specify the Zookeeper working directory.
 kafka_zoo_servers: # List of Zookeeper servers.
@@ -79,13 +79,15 @@ kafka_arg:
   wrapper_ulimit_loglevel: 'STATUS' # Controls at which log level resource limits will be logged.
 
 # Service Mesh #
-environments: 'SIT' # Define the service environment.
+environments: 'Development' # Define the service environment.
+datacenter: 'dc01' # Define the DataCenter.
+domain: 'local' # Define the Domain.
 #tags: # Define the service custom label.
 #  subscription: 'default'
 #  owner: 'nobody'
 #  department: 'Infrastructure'
 #  organization: 'The Company'
-#  region: 'IDC01'
+#  region: 'China'
 exporter_is_install: false # Whether to install prometheus exporter.
 consul_public_register: false # Whether register a exporter service with public consul client.
 consul_public_exporter_token: '00000000-0000-0000-0000-000000000000' # Public Consul client ACL token.
