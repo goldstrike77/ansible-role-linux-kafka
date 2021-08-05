@@ -23,7 +23,7 @@ __Table of Contents__
   * [Combination of group vars and playbook](#combination-of-group-vars-and-playbook)
 - [License](#license)
 - [Author Information](#author-information)
-- [Contributors](#Contributors)
+- [Donations](#Donations)
 
 ## Overview
 Kafka is an open-source stream-processing software platform developed by the Apache Software Foundation, written in Scala and Java. The project aims to provide a unified, high-throughput, low-latency platform for handling real-time data feeds.
@@ -130,7 +130,7 @@ There are no dependencies on other roles.
 ### Hosts inventory file
 See tests/inventory for an example.
 
-    node01 ansible_host='192.168.1.10' kafka_version='2.5.1'
+    node01 ansible_host='192.168.1.10' kafka_version='2.6.2'
 
 ### Vars in role configuration
 Including an example of how to use your role for instance, with variables passed in as parameters) is always nice for users too:
@@ -139,14 +139,14 @@ Including an example of how to use your role for instance, with variables passed
 - hosts: all
   roles:
      - role: ansible-role-linux-kafka
-       kafka_version: '2.5.1'
+       kafka_version: '2.6.2'
 ```
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-kafka_version: '2.5.1'
+kafka_version: '2.6.2'
 kafka_cluster: 'cluster'
 kafka_path: '/data'
 kafka_java_home: '/usr/lib/jvm/java'
@@ -230,5 +230,7 @@ consul_public_clients:
 ## Author Information
 Please send your suggestions to make this role better.
 
-## Contributors
-Special thanks to the [Connext Information Technology](http://www.connext.com.cn) for their contributions to this role.
+## Donations
+Please donate to the following monero address.
+
+    46CHVMbb6wQV2PJYEbahb353SYGqXhcdFQVEWdCnHb6JaR5125h3kNQ6bcqLye5G7UF7qz6xL9qHLDSAY3baagfmLZABz75

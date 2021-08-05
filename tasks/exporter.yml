@@ -5,6 +5,7 @@
     description: '{{ kafka_exporter_repo_name }} YUM repository'
     file: '{{ kafka_exporter_repo_name }}'
     baseurl: '{{ kafka_exporter_repo_url }}'
+    sslverify: 'no'
     gpgcheck: 'no'
     timeout: '60'
 

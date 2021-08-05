@@ -1,7 +1,7 @@
 ---
 # General parameters #
 kafka_is_install: false # A boolean value, whether install the Apache Kafka.
-kafka_version: '2.5.1' # Specify the Kafka version.
+kafka_version: '2.6.2' # Specify the Kafka version.
 kafka_cluster: 'cluster' # Cluster name of servers that implements distribution performance.
 kafka_path: '/data' # Specify the Kafka working directory.
 kafka_java_home: '/usr/lib/jvm/java' # Environment variable to point to an installed JDK.
@@ -14,7 +14,7 @@ kafka_zoo_dept: false # A boolean value, whether Zookeeper use the same environm
 
 # Kafka Eagle #
 kafka_eagle_is_install: true # Whether install the Kafka Eagle.
-kafka_eagle_version: '1.4.8' # Specify the Kafka Eagle version.
+kafka_eagle_version: '2.0.6' # Specify the Kafka Eagle version.
 kafka_eagle_token: 'changeme' # Kafka topic delete token.
 
 # ACL Variables #
@@ -27,7 +27,7 @@ kafka_zoo_client_arg: # Zookeeper authentication information.
 #    pass: 'changeme'
 
 # Zookeeper parameters #
-kafka_zoo_version: '3.5.8' # Specify the Zookeeper version.
+kafka_zoo_version: '3.5.9' # Specify the Zookeeper version.
 kafka_zoo_cluster: 'zk-cluster01' # Name of Zookeeper cluster.
 kafka_zoo_path: '/data' # Specify the Zookeeper working directory.
 kafka_zoo_servers: # List of Zookeeper servers.
@@ -79,9 +79,10 @@ kafka_arg:
   wrapper_ulimit_loglevel: 'STATUS' # Controls at which log level resource limits will be logged.
 
 # Service Mesh #
-environments: 'Development' # Define the service environment.
+environments: 'prd' # Define the service environment.
 datacenter: 'dc01' # Define the DataCenter.
 domain: 'local' # Define the Domain.
+customer: 'demo' # Define the customer name.
 #tags: # Define the service custom label.
 #  subscription: 'default'
 #  owner: 'nobody'
