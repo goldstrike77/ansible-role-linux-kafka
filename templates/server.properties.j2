@@ -143,8 +143,7 @@ log.retention.check.interval.ms=300000
 zookeeper.connect={{ kafka_zoo_servers | list | join(":" + kafka_zoo_port.client + ",") }}:{{ kafka_zoo_port.client }}
 
 # Timeout in ms for connecting to zookeeper
-zookeeper.connection.timeout.ms=6000
-
+zookeeper.connection.timeout.ms=60000
 
 ############################# Group Coordinator Settings #############################
 
